@@ -4,8 +4,25 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
+export async function authenticate(prevState: string | undefined, formData: FormData) {
+    try {
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid credentials.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+        throw error;
+    }
 
+}
 
 const FormSchema = z.object({
     id: z.string(),
@@ -15,7 +32,7 @@ const FormSchema = z.object({
 
     amount: z.coerce.number({
         invalid_type_error: 'Please enter a valid amount.',
-    }),
+    }).min(0.01, 'Amount must be greater than zero.'),
     status: z.enum(['pending', 'paid'], {
         invalid_type_error: 'Please select an invoice status.',
     }),
@@ -66,7 +83,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     } catch (error) {
         // If a database error occurs, return a more specific error.
         return {
-            message: 'Database Error: Failed to Create Invoice.',
+            message: `Database Error: Failed to Create Invoice. Details: ${error} `,
         };
     }
 
@@ -95,7 +112,7 @@ export async function updateInvoice(id: string, formData: FormData) {
 `;
 
     } catch (error) {
-        return { message: 'Database Error: Failed to Update Invoice.' };
+        return { message: `Database Error: Failed to Update Invoice. Details: ${error} ` };
     }
 
     revalidatePath('/dashboard/invoices');
@@ -107,7 +124,7 @@ export async function deleteInvoice(id: string) {
         await sql`DELETE FROM invoices WHERE id = ${id}`;
         revalidatePath('/dashboard/invoices');
     } catch (error) {
-        return { message: 'Database Error: Failed to Delete Invoice.' };
+        return { message: `Database Error: Failed to Delete Invoice. Details: ${error}` };
     }
 
 }
