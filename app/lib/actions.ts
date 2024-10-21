@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { InvoicesTable, Invoice } from '@/app/lib/definitions';
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
     try {
@@ -118,6 +119,21 @@ export async function updateInvoice(id: string, formData: FormData) {
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
 }
+
+
+export async function fetchInvoices(): Promise<InvoicesTable[]> {
+    try {
+        const invoices = await sql<Invoice>`
+        SELECT * FROM invoices ORDER BY date DESC;
+        `;
+        return invoices.rows;
+    } catch (error) {
+        throw new Error(`Database Error: Failed to Fetch Invoices. Details: ${error}`);
+    }
+}
+
+
+
 
 export async function deleteInvoice(id: string) {
     try {

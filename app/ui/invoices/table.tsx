@@ -1,17 +1,22 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { UpdateInvoice, DeleteInvoice } from "@/app/ui/invoices/buttons";
 import InvoiceStatus from "@/app/ui/invoices/status";
 import { formatDateToLocal, formatCurrency } from "@/app/lib/utils";
-import { fetchFilteredInvoices } from "@/app/lib/data";
+import type { InvoicesTable } from "@/app/lib/definitions";
 
-export default async function InvoicesTable({
-  query,
-  currentPage,
-}: {
-  query: string;
-  currentPage: number;
-}) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+interface InvoicesTableProps {
+  invoices: InvoicesTable[];
+}
+
+export default function InvoicesTable({ invoices }: InvoicesTableProps) {
+  const router = useRouter();
+
+  const handleRowClick = (id: string) => {
+    router.push(`/invoices/${id}`);
+  };
 
   return (
     <div className="mt-6 flow-root">
@@ -21,6 +26,7 @@ export default async function InvoicesTable({
             {invoices?.map((invoice) => (
               <div
                 key={invoice.id}
+                onClick={() => handleRowClick(invoice.id)}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
@@ -82,6 +88,7 @@ export default async function InvoicesTable({
               {invoices?.map((invoice) => (
                 <tr
                   key={invoice.id}
+                  onClick={() => handleRowClick(invoice.id)}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
