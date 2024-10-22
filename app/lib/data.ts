@@ -1,5 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
+  Customer,
   CustomerField,
   CustomersTableType,
   InvoiceForm,
@@ -8,6 +9,8 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import NodeCache from 'node-cache';
+
 
 export async function fetchRevenue() {
   try {
@@ -243,16 +246,34 @@ export async function fetchCustomersPages(query: string) {
 
 }
 
+const customerCache = new NodeCache({ stdTTL: 60 });
 
 // Fetch customer by ID
-export async function getCustomerById(id: string) {
+export async function getCustomerById(id: string): Promise<Customer | null> {
+  const cachedCustomer: Customer | undefined = customerCache.get(id);
+
+  if (cachedCustomer) {
+    console.log('Serving customer from cache');
+    return cachedCustomer;
+  }
+
+  console.log('Fetching customer by ID:', id);
   try {
-    const result = await sql`
-      SELECT id, name, email, phone, image_url
+    const result = await sql<Customer>`
+      SELECT id, name, email, name, image_url
       FROM customers
       WHERE id = ${id}
     `;
-    return result.rows[0]; // Return the first (and expected only) result
+    const customer: (Customer | null) = result.rows[0] || null;
+
+    //cache the result before returning
+    if (customer) {
+      customerCache.set(id, customer);
+      console.log('Customer fetched and cached:', customer);
+    }
+
+
+    return customer; // Return the first (and expected only) result
   } catch (error) {
     console.error('Error fetching customer:', error);
     return null; // Return null if the customer is not found or an error occurs
