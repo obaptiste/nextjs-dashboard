@@ -130,49 +130,35 @@ export async function deleteInvoice(id: string) {
 }
 
 
-const CreateCustomer = z.object({
-    name: z.string().min(1, 'Please enter a customer name.'),
-    email: z.string().email('Please enter a valid email address.'),
+// Define the Zod schema for customer creation
+const CreateCustomerSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email'),
     image_url: z.string().url().optional(),
 });
 
-
-export async function createCustomer(prevState: State, formData: FormData) {
-    //Validate form using Zod
-    const validatedFields = CreateCustomer.safeParse({
-        name: formData.get('name'),
-        email: formData.get('email'),
-        image_url: formData.get('image_url'),
+// Server Action for creating a new customer
+export async function createCustomer(formData: FormData) {
+    const validatedData = CreateCustomerSchema.safeParse({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        image_url: formData.get("image_url"),
     });
 
-    //if validation fails, return errors early
-    if (!validatedFields.success) {
-        return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Customer.',
-        };
+    if (!validatedData.success) {
+        return { errors: validatedData.error.flatten().fieldErrors };
     }
 
-    const { name, email, image_url } = validatedFields.data;
+    const { name, email, image_url } = validatedData.data;
 
-
-    //insert customer data into database
     try {
-        await sql`
-        INSERT INTO customers (name, email, image_url)
-        VALUES (${name}, ${email}, ${image_url ?? null})
-      `;
+        await sql`INSERT INTO customers (name, email, image_url) VALUES (${name}, ${email}, ${image_url ?? null})`;
+        revalidatePath("/dashboard/customers");
+        redirect("/dashboard/customers");
     } catch (error) {
-        // If a database error occurs, return a more specific error.
-        return {
-            message: `Database Error: Failed to Create Customer. Details: ${error} `,
-        };
+        console.error("Database Error:", error);
+        return { errors: { message: "Failed to create customer due to a database error." } };
     }
-
-    //Revalidate cache for the customers page ( if needed ) and redirect
-    revalidatePath('/dashboard/customers');
-    redirect('/dashboard/customers');
-
 }
 
 const UpdateCustomer = z.object({

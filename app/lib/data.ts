@@ -242,3 +242,34 @@ export async function fetchCustomersPages(query: string) {
   }
 
 }
+
+
+// Fetch customer by ID
+export async function getCustomerById(id: string) {
+  try {
+    const result = await sql`
+      SELECT id, name, email, phone, image_url
+      FROM customers
+      WHERE id = ${id}
+    `;
+    return result.rows[0]; // Return the first (and expected only) result
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+    return null; // Return null if the customer is not found or an error occurs
+  }
+}
+
+// Fetch invoices associated with a customer by customer ID
+export async function getInvoicesByCustomerId(customerId: string) {
+  try {
+    const result = await sql`
+      SELECT id, date, amount, status
+      FROM invoices
+      WHERE customer_id = ${customerId}
+    `;
+    return result.rows; // Return the list of invoices
+  } catch (error) {
+    console.error('Error fetching invoices:', error);
+    return []; // Return an empty array if there are no invoices or an error occurs
+  }
+}
