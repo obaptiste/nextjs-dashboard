@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 
+
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,11 +13,17 @@ const config: Config = {
         '13': 'repeat(13, minmax(0, 1fr))',
       },
       colors: {
+        primary: '#2589FE', // Consistent primary color
+        secondary: '#0070F3',
         blue: {
           400: '#2589FE',
           500: '#0070F3',
           600: '#2F6FEB',
         },
+      },
+      fontFamily: {
+        body: ['Inter', 'sans-serif'],
+        heading: ['Lusitana', 'serif'],
       },
     },
     keyframes: {
@@ -27,6 +34,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [],
 };
 export default config;

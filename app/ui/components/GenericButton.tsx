@@ -1,37 +1,35 @@
-import { ReactNode } from "react";
+"use client";
+
+import React, { ReactNode } from "react";
 import Link from "next/link";
 
-type GenericButtonProps = {
-  href?: string;
-  onClick?: () => void;
-  icon?: ReactNode;
-  children?: ReactNode;
-  className?: string;
-  formId?: string;
-  type?: "submit" | "button";
-  hoverClassName?: string;
-};
+interface GenericButtonProps {
+  href?: string; // Optional href for links
+  onClick?: () => void; // Optional click handler
+  icon?: ReactNode; // Icon element
+  className?: string; // Custom class for styling
+  hoverClassName?: string; // Custom hover class for styling
+  type?: "button" | "submit"; // Button type for form submission
+  children?: ReactNode; // Any additional children inside the button
+  disabled?: boolean;
+}
 
-export default function GenericButton({
+const GenericButton: React.FC<GenericButtonProps> = ({
   href,
   onClick,
   icon,
-  children,
   className,
-  formId,
-  type = "button",
   hoverClassName,
-}: GenericButtonProps) {
-  const baseClasses =
-    "flex items-center rounded-md p-2 transition-colors focus-visible:outline focus-visible:outline-2";
-  const combinedHoverClasses =
-    hoverClassName || "hover:bg-gray-100 hover:text-blue-500";
-  const combinedClasses = `${baseClasses} ${combinedHoverClasses} ${className}`;
+  disabled,
+  type = "button",
+  children,
+}) => {
+  const buttonClasses = `${className} ${hoverClassName} flex items-center justify-center gap-2 py-2 px-4 text-sm font-medium rounded-md focus:outline-none`;
 
   if (href) {
     return (
-      <Link href={href} className={combinedClasses}>
-        {icon && <span className="mr-2">{icon}</span>}
+      <Link href={href} className={buttonClasses}>
+        {icon}
         {children}
       </Link>
     );
@@ -40,12 +38,14 @@ export default function GenericButton({
   return (
     <button
       type={type}
-      form={formId}
       onClick={onClick}
-      className={combinedClasses}
+      className={buttonClasses}
+      disabled={disabled}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {icon}
       {children}
     </button>
   );
-}
+};
+
+export default GenericButton;

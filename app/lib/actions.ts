@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { Customer } from './definitions';
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
     try {
@@ -169,12 +170,14 @@ const UpdateCustomer = z.object({
 });
 
 export async function updateCustomer(id: string, formData: FormData) {
+    // Validate the form data using zod
     const validatedFields = UpdateCustomer.safeParse({
         name: formData.get('name'),
         email: formData.get('email'),
         image_url: formData.get('image_url'),
     });
 
+    // If validation fails, return the errors
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
@@ -185,18 +188,24 @@ export async function updateCustomer(id: string, formData: FormData) {
     const { name, email, image_url } = validatedFields.data;
 
     try {
-        await sql`
-    UPDATE customers
-    SET name = ${name},
-        email = ${email},
-        image_url = ${image_url ?? null}
-    WHERE id = ${id}
-`;
+        // Perform the database update
+        await sql<Customer>`
+        UPDATE customers
+        SET name = ${name},
+            email = ${email},
+            image_url = ${image_url ?? null}
+        WHERE id = ${id}
+        `;
     } catch (error) {
+        // Log the error and return a more specific message
+        console.error('Database Error:', error);
         return { message: `Database Error: Failed to Update Customer. Details: ${error}` };
     }
 
+    // Revalidate the customers path to show the updated data
     revalidatePath('/dashboard/customers');
+
+    // Redirect back to the customer list after a successful update
     redirect('/dashboard/customers');
 }
 

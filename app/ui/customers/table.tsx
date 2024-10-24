@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { CustomerTableSkeleton } from "@/app/ui/skeletons"; // Your skeleton loader component
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { lusitana } from "@/app/ui/fonts";
 import Search from "@/app/ui/search";
 import { fetchFilteredCustomers } from "@/app/lib/data";

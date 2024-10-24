@@ -1,3 +1,5 @@
+"use client";
+
 import GenericButton from "../components/GenericButton";
 import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { deleteCustomer } from "@/app/lib/actions";
@@ -25,6 +27,33 @@ export function UpdateCustomerButton({ id }: { id: string }) {
     />
   );
 }
+
+interface CustomerSubmitBtnProps {
+  isSubmitting: boolean;
+  className?: string;
+  hoverClassName?: string;
+  type?: "button" | "submit";
+  children?: React.ReactNode;
+}
+
+export const CustomerSubmitBtn: React.FC<CustomerSubmitBtnProps> = ({
+  isSubmitting,
+  className,
+  hoverClassName,
+  children,
+  type = "submit", // type="submit", Defaulted to submit as it's a form button
+}) => {
+  return (
+    <GenericButton
+      type={type}
+      className={`${className} ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+      hoverClassName={hoverClassName}
+      disabled={isSubmitting} // Disable the button while submitting
+    >
+      {isSubmitting ? "Submitting..." : children}
+    </GenericButton>
+  );
+};
 
 export function DeleteCustomerButton({ id }: { id: string }) {
   const deleteCustomerWithId = deleteCustomer.bind(null, id);
