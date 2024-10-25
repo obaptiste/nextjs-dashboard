@@ -51,7 +51,7 @@ export default async function CustomerForm({
             type="text"
             id="name"
             name="name"
-            defaultValue={customer?.name ?? ""}
+            defaultValue={customer?.name || ""}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
             required
           />
