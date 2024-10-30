@@ -1,0 +1,40 @@
+/* Modal background overlay */
+.modal {
+    position: fixed;            /* Position fixed to cover the entire screen */
+    top: 0;
+    left: 0;
+    width: 100vw;               /* Full viewport width */
+    height: 100vh;              /* Full viewport height */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;              /* Flexbox to center modal content */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;              /* High z-index to overlay other elements */
+  }
+  
+  /* Modal content box */
+  .modal_content {
+    background-color: #ffffff;  /* White background for the modal */
+    padding: 2rem;              /* Padding for content spacing */
+    border-radius: 8px;         /* Rounded corners */
+    max-width: 600px;           /* Maximum width of the modal */
+    width: 90%;                 /* Responsive width */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    position: relative;         /* Position relative for the close button */
+  }
+  
+  /* Close button styling */
+  .close_button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+  }
+  
+  .close_button:hover {
+    color: #333;
+  }

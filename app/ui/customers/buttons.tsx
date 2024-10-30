@@ -3,6 +3,7 @@
 import GenericButton from "../components/GenericButton";
 import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { deleteCustomer } from "@/app/lib/actions";
+import Link from "next/link";
 
 export function CreateCustomerButton() {
   return (
@@ -19,12 +20,14 @@ export function CreateCustomerButton() {
 
 export function UpdateCustomerButton({ id }: { id: string }) {
   return (
-    <GenericButton
-      href={`/dashboard/customers/${id}/edit`}
-      icon={<PencilIcon className="w-5" />}
-      className="border border-gray-300"
-      hoverClassName="hover:bg-gray-100"
-    />
+    <>
+      <PencilIcon className="w-5" />
+      <Link
+        href={`/dashboard/customers/${id}?modal=edit`}
+        as={`/dashboard/customers/${id}`}
+        className="border border-gray-300 hover:bg-gray-100"
+      />
+    </>
   );
 }
 
