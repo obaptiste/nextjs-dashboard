@@ -1,11 +1,8 @@
 import { Suspense } from "react";
 import { CustomerTableSkeleton } from "@/app/ui/skeletons"; // Your skeleton loader component
 import Image from "next/legacy/image";
-import { lusitana } from "@/app/ui/fonts";
-import Search from "@/app/ui/search";
 import { fetchFilteredCustomers } from "@/app/lib/data";
 import Link from "next/link"; // Import the Next.js Link component
-
 export default async function CustomersTable({
   query,
   currentPage,
@@ -18,10 +15,6 @@ export default async function CustomersTable({
 
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-        Customers
-      </h1>
-      <Search placeholder="Search customers..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">

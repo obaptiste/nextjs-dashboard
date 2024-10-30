@@ -19,7 +19,7 @@ export default async function EditCustomerPage({
       <h1>Edit Customer</h1>
       {/* Render the form inside a Suspense boundary for streaming */}
       <Suspense fallback={<p>Loading form...</p>}>
-        <CustomerForm mode="edit" />
+        <CustomerForm mode="edit" customer={customer} />
       </Suspense>
     </div>
   );
