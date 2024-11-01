@@ -3,14 +3,13 @@ import { CustomerTableSkeleton } from "@/app/ui/skeletons"; // Your skeleton loa
 import Image from "next/legacy/image";
 import { fetchFilteredCustomers } from "@/app/lib/data";
 import Link from "next/link"; // Import the Next.js Link component
-export default async function CustomersTable({
-  query,
-  currentPage,
-}: {
+
+export default async function CustomersTable(props: {
   query: string;
   currentPage: number;
 }) {
-  console.log(query, currentPage);
+  const { query, currentPage } = props;
+  console.log(props, props.query, { ...props });
   const customers = await fetchFilteredCustomers(query, currentPage);
 
   return (

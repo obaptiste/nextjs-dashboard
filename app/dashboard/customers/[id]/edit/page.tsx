@@ -1,17 +1,20 @@
-import { getCustomerById } from "@/app/lib/data"; // Directly fetch customer data from your database
+import { getCustomerById } from "@/app/lib/data";
+import CustomerForm from "@/app/ui/customers/CustomerForm";
 import { Suspense } from "react";
-import CustomerForm from "@/app/ui/customers/CustomerForm"; // Client component that will render the form
 
-// Server Component for editing a customer
-export default async function EditCustomerPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const customer = await getCustomerById(params.id); // Fetch the customer data using the ID from the URL
+// Use the exact Next.js App Router page props type
+export default async function Page(props: { params: { id: string } }) {
+  const { params } = props;
+  const { id } = params;
+
+  const customer = await getCustomerById(id); // Fetch the customer data using the ID from the URL
 
   if (!customer) {
-    return <p>Customer not found</p>;
+    return (
+      <div className="p-4">
+        <p>Customer not found</p>
+      </div>
+    );
   }
 
   return (

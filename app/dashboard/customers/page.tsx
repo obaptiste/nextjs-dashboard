@@ -7,18 +7,16 @@ import Search from "@/app/ui/search";
 import { lusitana } from "@/app/ui/fonts";
 import { CreateCustomerButton } from "@/app/ui/customers/buttons";
 
-export default async function CustomersPage({
-  searchParams,
-}: {
+export default async function CustomersPage(props: {
   searchParams?: {
     query?: string;
     page?: string;
   };
 }) {
-  const query = searchParams?.query || "";
+  const { searchParams } = props;
+  const query = searchParams?.query ?? "";
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchCustomersPages(query);
-
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">

@@ -6,14 +6,15 @@ import Image from "next/image"; // Import Next.js Image component
 import styles from "@/app/dashboard/customers/customers.module.css"; // Import CSS module
 
 // Server Component to display customer details
-export default async function CustomerDetailsPage({
-  params,
-}: {
+export default async function CustomerDetailsPage(props: {
   params: { id: string };
 }) {
   // Fetch customer details by ID
-  const customer = await getCustomerById(params.id); // Type allows for null
-  const invoices = await getInvoicesByCustomerId(params.id);
+  const { params } = props;
+  const { id } = params;
+
+  const customer = await getCustomerById(id); // Type allows for null
+  const invoices = await getInvoicesByCustomerId(id);
 
   // Handle case where the customer is not found
   if (!customer) {

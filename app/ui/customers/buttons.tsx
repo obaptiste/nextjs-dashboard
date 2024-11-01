@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
 import GenericButton from "../components/GenericButton";
 import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { deleteCustomer } from "@/app/lib/actions";
+import clsx from "clsx";
 
 export function CreateCustomerButton() {
   return (
@@ -38,19 +40,29 @@ interface CustomerSubmitBtnProps {
 
 export const CustomerSubmitBtn: React.FC<CustomerSubmitBtnProps> = ({
   isSubmitting,
-  className,
-  hoverClassName,
+  className = "bg-blue-600 text-white",
+  hoverClassName = "hover:bg-blue-500 hover:shadow-lg",
   children,
   type = "submit", // type="submit", Defaulted to submit as it's a form button
 }) => {
   return (
     <GenericButton
       type={type}
-      className={`${className} ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
-      hoverClassName={hoverClassName}
       disabled={isSubmitting} // Disable the button while submitting
+      className={clsx(
+        "relative inline-flex items-center justify-center px-6 py-2 text-sm font-medium rounded-md shadow transition-all duration-300 ease-in-out transform",
+        className,
+        hoverClassName,
+        {
+          "opacity-50 cursor-not-allowed": isSubmitting,
+        }
+      )}
     >
-      {isSubmitting ? "Submitting..." : children}
+      {isSubmitting ? (
+        <span className="animate-pulse">Submitting</span>
+      ) : (
+        children
+      )}
     </GenericButton>
   );
 };
