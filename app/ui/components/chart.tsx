@@ -15,7 +15,7 @@ export default function RevenueChart() {
   ];
 
   return (
-    <div className="w-full h-64">
+    <div className="w-full h-[28rem]">
       <ResponsiveBar
         data={data}
         keys={["revenue"]}
