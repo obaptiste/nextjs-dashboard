@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   CheckIcon,
   ClockIcon,
-  CurrencyDollarIcon,
+  CurrencyPoundIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
@@ -18,9 +18,10 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     errors: {},
   };
   const [state, formAction] = useActionState(createInvoice, initialState);
+
   return (
     <form action={formAction}>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-4 md:p-6 transition-all duration-300 ease-in-out hover:shadow-lg">
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
@@ -30,7 +31,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             <select
               id="customer"
               name="customerId"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 transition duration-200 ease-in-out focus:border-blue-400 focus:ring-blue-400"
               defaultValue=""
               aria-describedby="customer-error"
             >
@@ -43,7 +44,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 </option>
               ))}
             </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 transition duration-200 ease-in-out peer-focus:text-blue-400" />
           </div>
           <div id="customer-error" aria-live="polite" aria-atomic="true">
             {state.errors?.customerId &&
@@ -58,7 +59,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
+            Enter amount (GBP)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -68,11 +69,11 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 type="number"
                 step="0.01"
                 min="0.01"
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                placeholder="Enter GBP amount"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 transition duration-200 ease-in-out focus:border-blue-400 focus:ring-blue-400"
                 aria-describedby="amount-error"
               />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <CurrencyPoundIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 transition duration-200 ease-in-out peer-focus:text-blue-400" />
             </div>
           </div>
           <div id="amount-error" aria-live="polite" aria-atomic="true">
@@ -90,7 +91,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           <legend className="mb-2 block text-sm font-medium">
             Set the invoice status
           </legend>
-          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3 transition-all duration-300 ease-in-out hover:shadow-sm">
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
@@ -98,11 +99,11 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   name="status"
                   type="radio"
                   value="pending"
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 transition-all duration-200 ease-in-out checked:bg-yellow-400"
                 />
                 <label
                   htmlFor="pending"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-yellow-400 hover:text-white"
                 >
                   Pending <ClockIcon className="h-4 w-4" />
                 </label>
@@ -113,11 +114,11 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   name="status"
                   type="radio"
                   value="paid"
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 transition-all duration-200 ease-in-out checked:bg-green-400"
                 />
                 <label
                   htmlFor="paid"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 ease-in-out hover:bg-green-600"
                 >
                   Paid <CheckIcon className="h-4 w-4" />
                 </label>
@@ -137,11 +138,16 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200"
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <Button
+          type="submit"
+          className="bg-blue-600 text-white rounded-md px-6 py-2 transition-all duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105 hover:shadow-lg"
+        >
+          Create Invoice
+        </Button>
       </div>
     </form>
   );

@@ -1,4 +1,3 @@
-import RevenueChart from "../../ui/dashboard/revenue-chart";
 import LatestInvoices from "../../ui/dashboard/latest-invoices";
 import { lusitana } from "../../ui/fonts";
 import { Suspense } from "react";
@@ -8,6 +7,7 @@ import {
   RevenueChartSkeleton,
   CardSkeleton,
 } from "@/app/ui/skeletons";
+import CustomerContributionsChart from "@/app/ui/components/chart";
 
 export default async function Page() {
   return (
@@ -20,13 +20,18 @@ export default async function Page() {
           <CardWrapper />
         </Suspense>
       </div>
-      <div className="mt-6 grid gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChart />
-        </Suspense>
-        <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
-        </Suspense>
+      <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+        <div className="w-full p-4 bg-white shadow rounded-md">
+          <Suspense fallback={<RevenueChartSkeleton />}>
+            <CustomerContributionsChart />
+          </Suspense>
+        </div>
+
+        <div className="w-full p-4 bg-white shadow rounded-md">
+          <Suspense fallback={<LatestInvoicesSkeleton />}>
+            <LatestInvoices />
+          </Suspense>
+        </div>
       </div>
     </main>
   );
