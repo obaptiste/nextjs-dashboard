@@ -26,8 +26,6 @@ export default function RevenueChart() {
         indexScale={{ type: "band", round: true }}
         colors={{ scheme: "nivo" }}
         animate={true} // Enable animation
-        motionStiffness={90}
-        motionDamping={15}
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
